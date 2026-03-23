@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahmed Adel Moghraby — Backend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #070b12;
+    --bg2:     #0c1120;
+    --bg3:     #101829;
+    --border:  rgba(255,255,255,0.07);
+    --accent:  #00d4a0;
+    --accent2: #f0a850;
+    --blue:    #60a5fa;
+    --text:    #e2e8f0;
+    --muted:   #4b5a72;
+    --muted2:  #8896a8;
+    --mono:    'JetBrains Mono', monospace;
+    --sans:    'Sora', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--sans); font-size: 15px;
+    line-height: 1.7; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-size: 200px; pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,160,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,160,0.025) 1px, transparent 1px);
+    background-size: 52px 52px; pointer-events: none; z-index: 0;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+    background: rgba(7,11,18,0.88); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand { display: flex; flex-direction: column; gap: 1px; }
+  .nav-brand-handle { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); letter-spacing: 0.08em; }
+  .nav-brand-name   { font-family: var(--mono); font-size: 0.68rem; color: var(--muted2); letter-spacing: 0.03em; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-family: var(--mono); font-size: 0.76rem; color: var(--muted2); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  #hero { min-height: 100vh; display: flex; align-items: center; padding-top: 5rem; }
+  .hero-inner { display: grid; grid-template-columns: 1fr 400px; gap: 4rem; align-items: center; width: 100%; }
+  .status-dot { display: inline-flex; align-items: center; gap: 0.45rem; font-family: var(--mono); font-size: 0.72rem; color: var(--accent); margin-bottom: 1.4rem; }
+  .status-dot::before { content: ''; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,212,160,0.5);}50%{box-shadow:0 0 0 5px rgba(0,212,160,0);} }
+  .hero-handle { font-family: var(--mono); font-size: 0.95rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+  .hero-handle span { color: var(--accent); }
+  h1 { font-size: clamp(2.5rem, 5.5vw, 3.8rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+  .hero-role { font-size: 1rem; color: var(--muted2); margin-bottom: 1.6rem; font-weight: 400; }
+  .hero-role .sep { color: var(--muted); margin: 0 0.4rem; }
+  .hero-desc { color: var(--muted2); font-size: 0.95rem; max-width: 500px; margin-bottom: 2.2rem; line-height: 1.85; }
+  .hero-cta { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.4rem; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.05em; text-decoration: none; border-radius: 4px; transition: all 0.2s; cursor: pointer; border: none; }
+  .btn-primary { background: var(--accent); color: #070b12; font-weight: 600; }
+  .btn-primary:hover { background: #00f5b8; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,212,160,0.25); }
+  .btn-ghost { background: transparent; color: var(--muted2); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: rgba(0,212,160,0.4); color: var(--accent); }
+
+  /* TERMINAL */
+  .terminal { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,212,160,0.06); }
+  .terminal-bar { display: flex; align-items: center; gap: 0.45rem; padding: 0.7rem 1rem; background: var(--bg3); border-bottom: 1px solid var(--border); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .dot-r{background:#ff5f57;} .dot-y{background:#febc2e;} .dot-g{background:#28c840;}
+  .terminal-file { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-left: auto; }
+  .terminal-body { padding: 1.3rem 1.5rem; font-family: var(--mono); font-size: 0.79rem; line-height: 1.9; }
+  .t-prompt{color:var(--accent);} .t-cmd{color:var(--text);}
+  .t-key{color:#93c5fd;} .t-str{color:#86efac;} .t-arr{color:var(--accent2);} .t-muted{color:var(--muted);}
+  .t-cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); vertical-align: middle; animation: blink 1.1s step-end infinite; }
+  @keyframes blink { 50%{opacity:0;} }
+
+  /* SECTIONS */
+  section { padding: 5rem 0; }
+  .section-label { display: flex; align-items: center; gap: 1rem; font-family: var(--mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2.8rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .about-text p { color: var(--muted2); margin-bottom: 1.2rem; font-size: 0.95rem; line-height: 1.85; }
+  .about-details { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .detail-row { display: grid; grid-template-columns: 110px 1fr; border-bottom: 1px solid var(--border); }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); padding: 0.82rem 1rem; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(255,255,255,0.02); border-right: 1px solid var(--border); }
+  .detail-val { font-size: 0.86rem; color: var(--text); padding: 0.82rem 1.1rem; }
+  .detail-val a { color: var(--accent); text-decoration: none; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1rem; }
+  .skill-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.3rem; transition: border-color 0.2s, transform 0.2s; }
+  .skill-card:hover { border-color: rgba(0,212,160,0.25); transform: translateY(-2px); }
+  .skill-card-title { font-family: var(--mono); font-size: 0.68rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
+  .skill-card-title::before { content: ''; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag { font-family: var(--mono); font-size: 0.7rem; padding: 0.25rem 0.65rem; background: rgba(0,212,160,0.05); border: 1px solid rgba(0,212,160,0.15); border-radius: 3px; color: var(--muted2); }
+
+  /* PROJECTS TIERS */
+  .tier-header { display: flex; align-items: center; gap: 0.8rem; font-family: var(--mono); font-size: 0.68rem; color: var(--muted2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.3rem; margin-top: 2.4rem; }
+  .tier-header:first-child { margin-top: 0; }
+  .tier-header::before { content: '//'; color: var(--accent); font-size: 0.75rem; }
+  .tier-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* flagship */
+  .project-flagship {
+    background: var(--bg2); border: 1px solid rgba(0,212,160,0.2); border-radius: 10px;
+    padding: 2.2rem; position: relative; overflow: hidden; margin-bottom: 1.2rem;
+  }
+  .project-flagship::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent) 0%, transparent 65%); }
+  .flagship-label { position: absolute; top: 1.2rem; right: 1.4rem; font-family: var(--mono); font-size: 0.62rem; color: var(--accent); letter-spacing: 0.18em; opacity: 0.35; }
+
+  .project-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.8rem; position: relative; overflow: hidden; transition: border-color 0.25s; margin-bottom: 1rem; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); opacity: 0; transition: opacity 0.25s; }
+  .project-card:hover { border-color: rgba(0,212,160,0.22); }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+  .project-name { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.2rem; }
+  .project-flagship .project-name { font-size: 1.3rem; }
+  .project-meta { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.03em; }
+  .project-badge { font-family: var(--mono); font-size: 0.67rem; padding: 0.18rem 0.55rem; border-radius: 3px; letter-spacing: 0.05em; white-space: nowrap; }
+  .badge-grad  { background:rgba(240,168,80,0.1);   border:1px solid rgba(240,168,80,0.3);  color:var(--accent2); }
+  .badge-live  { background:rgba(0,212,160,0.1);    border:1px solid rgba(0,212,160,0.3);   color:var(--accent);  }
+  .badge-oss   { background:rgba(96,165,250,0.08);  border:1px solid rgba(96,165,250,0.2);  color:var(--blue);    }
+  .badge-comp  { background:rgba(148,163,184,0.08); border:1px solid rgba(148,163,184,0.15);color:var(--muted2);  }
+  .badge-game  { background:rgba(240,168,80,0.07);  border:1px solid rgba(240,168,80,0.2);  color:var(--accent2); }
+
+  .project-desc { color: var(--muted2); font-size: 0.92rem; margin-bottom: 1.2rem; line-height: 1.75; }
+  .project-points { list-style: none; margin-bottom: 1.3rem; display: grid; gap: 0.35rem; }
+  .project-points li { font-size: 0.86rem; color: var(--muted2); padding-left: 1.1rem; position: relative; }
+  .project-points li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 0.68rem; top: 0.15rem; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .stack-tag { font-family: var(--mono); font-size: 0.67rem; padding: 0.18rem 0.5rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; color: var(--muted); }
+  /* LINK BUTTONS — typed */
+  .link-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.1rem; }
+  .lnk {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em;
+    padding: 0.38rem 0.85rem; border-radius: 4px; text-decoration: none;
+    border: 1px solid; transition: all 0.2s; position: relative; overflow: hidden;
+  }
+  .lnk::before {
+    content: ''; position: absolute; inset: 0;
+    background: currentColor; opacity: 0; transition: opacity 0.2s;
+  }
+  .lnk:hover::before { opacity: 0.07; }
+  .lnk:hover { transform: translateY(-1px); }
+
+  /* website = teal */
+  .lnk-web {
+    color: var(--accent); border-color: rgba(0,212,160,0.35);
+    background: rgba(0,212,160,0.05);
+  }
+  .lnk-web:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,212,160,0.15); }
+
+  /* github = blue */
+  .lnk-gh {
+    color: var(--blue); border-color: rgba(96,165,250,0.3);
+    background: rgba(96,165,250,0.05);
+  }
+  .lnk-gh:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(96,165,250,0.12); }
+
+  /* private = muted, no pointer on the label */
+  .lnk-private {
+    color: var(--muted2); border-color: rgba(148,163,184,0.18);
+    background: rgba(148,163,184,0.04); cursor: default;
+  }
+  .lnk-private:hover { transform: none; box-shadow: none; }
+  .lnk-private::before { display: none; }
+
+  /* private work notice card */
+  .private-note {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: rgba(148,163,184,0.04); border: 1px dashed rgba(148,163,184,0.18);
+    border-radius: 8px; padding: 1.1rem 1.3rem; margin-top: 1.2rem;
+  }
+  .private-note-icon { font-size: 1rem; margin-top: 0.1rem; flex-shrink: 0; }
+  .private-note-text { font-size: 0.84rem; color: var(--muted2); line-height: 1.7; }
+  .private-note-text strong { color: var(--text); font-weight: 500; }
+
+  /* OSS cards */
+  .oss-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .oss-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem; transition: border-color 0.2s; }
+  .oss-card:hover { border-color: rgba(0,212,160,0.2); }
+  .oss-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+  .oss-name { font-size: 0.95rem; font-weight: 600; }
+  .oss-desc { font-size: 0.84rem; color: var(--muted2); line-height: 1.7; margin-bottom: 0.9rem; }
+
+  /* EXPERIENCE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 1px; background: linear-gradient(to bottom, var(--accent), transparent); }
+  .tl-item { position: relative; margin-bottom: 2.2rem; }
+  .tl-item::before { content: ''; position: absolute; left: -2.33rem; top: 0.42rem; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px rgba(0,212,160,0.4); }
+  .tl-period { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .tl-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.15rem; }
+  .tl-org { font-size: 0.86rem; color: var(--muted2); margin-bottom: 0.45rem; }
+  .tl-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.7; }
+
+  /* EDUCATION */
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .edu-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
+  .edu-degree { font-size: 0.98rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .edu-school { font-size: 0.86rem; color: var(--muted2); margin-bottom: 0.55rem; }
+  .edu-period { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); }
+  .cert-list { display: grid; gap: 0.5rem; margin-top: 0.8rem; }
+  .cert-item { background: var(--bg3); border: 1px solid var(--border); border-radius: 5px; padding: 0.65rem 0.9rem; display: flex; justify-content: space-between; align-items: center; }
+  .cert-name { font-size: 0.84rem; }
+  .cert-org { font-family: var(--mono); font-size: 0.67rem; color: var(--accent); }
+
+  /* SITES */
+  .sites-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .site-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem; transition: border-color 0.2s; display: block; text-decoration: none; color: inherit; }
+  .site-card:hover { border-color: rgba(0,212,160,0.3); }
+  .site-url { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); margin-bottom: 0.55rem; display: flex; align-items: center; gap: 0.4rem; transition: gap 0.2s; }
+  .site-card:hover .site-url { gap: 0.6rem; }
+  .site-name { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.45rem; }
+  .site-desc { font-size: 0.84rem; color: var(--muted2); line-height: 1.7; }
+
+  /* CONTACT */
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-text p { color: var(--muted2); font-size: 0.93rem; line-height: 1.8; margin-bottom: 2rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 0.65rem; }
+  .contact-link { display: flex; align-items: center; gap: 0.8rem; font-size: 0.84rem; color: var(--muted2); text-decoration: none; padding: 0.6rem 1rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; font-family: var(--mono); }
+  .contact-link:hover { border-color: rgba(0,212,160,0.3); color: var(--accent); background: rgba(0,212,160,0.04); }
+  .contact-link .icon { width: 16px; text-align: center; color: var(--accent); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* FOOTER */
+  footer { padding: 1.6rem 2rem; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+  .footer-left { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .footer-handle { color: var(--accent); }
+  .footer-right { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+
+  @media (max-width: 860px) {
+    .hero-inner, .about-grid, .contact-inner, .edu-grid, .oss-row, .sites-grid { grid-template-columns: 1fr; gap: 2rem; }
+    nav { padding: 0.9rem 1rem; }
+    .nav-links { gap: 1.2rem; }
+  }
+  @media (max-width: 540px) { .nav-links { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-brand-handle">dolamasa</div>
+    <div class="nav-brand-name">Ahmed Adel Moghraby</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div>
+        <div class="status-dot">Available for opportunities</div>
+        <div class="hero-handle">// <span>@dolamasa</span></div>
+        <h1>Ahmed Adel<br>Moghraby</h1>
+        <p class="hero-role">Backend Developer <span class="sep">·</span> Systems Architect</p>
+        <p class="hero-desc">I build data-driven systems from the ground up — establishing business rules and data models before a single line of code. Specializing in real-time infrastructure, cross-stack architecture, and resource-constrained environments.</p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">View Projects ↓</a>
+          <a href="https://github.com/dolamasa1" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+          <a href="https://linkedin.com/in/ahmed-el-moghraby" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+        </div>
+      </div>
+      <div class="terminal reveal">
+        <div class="terminal-bar">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span class="terminal-file">whoami.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-prompt">dolamasa</span><span class="t-muted">@ahmed:~$</span> <span class="t-cmd">./whoami.sh</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-muted">{</span></div>
+          <div>&nbsp;&nbsp;<span class="t-key">"handle"</span>: <span class="t-str">"dolamasa"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"name"</span>: <span class="t-str">"Ahmed Adel Moghraby"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"stack"</span>: <span class="t-arr">["Java", "Go", "Node.js"]</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"databases"</span>: <span class="t-arr">["PostgreSQL", "SQL Server"]</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"realtime"</span>: <span class="t-arr">["WebSocket", "SSE", "WebRTC"]</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"motto"</span>: <span class="t-str">"Performance is truth"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"status"</span>: <span class="t-str">"building"</span></div>
+          <div><span class="t-muted">}</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-prompt">dolamasa</span><span class="t-muted">@ahmed:~$</span> <span class="t-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-label">00 · About</div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>A backend developer focused on constructing comprehensive, data-driven systems from initial human requirements. I establish business rules, data models, and architectural parameters before any code is written.</p>
+        <p>I navigate across technology stacks, develop real-time infrastructure, and solve for performance within resource constraints. I go by <span style="color:var(--accent);font-family:var(--mono);">@dolamasa</span> across platforms.</p>
+        <p>My motto: <span style="color:var(--accent);font-family:var(--mono);">"Performance is truth."</span></p>
+      </div>
+      <div class="about-details reveal reveal-delay-1">
+        <div class="detail-row"><div class="detail-key">Email</div><div class="detail-val"><a href="mailto:ahmed.adel.elmoghraby@gmail.com">ahmed.adel.elmoghraby@gmail.com</a></div></div>
+        <div class="detail-row"><div class="detail-key">Phone</div><div class="detail-val">+20 120 418 3236</div></div>
+        <div class="detail-row"><div class="detail-key">Location</div><div class="detail-val">Cairo, Egypt</div></div>
+        <div class="detail-row"><div class="detail-key">Languages</div><div class="detail-val">Arabic (Native) · English (B2)</div></div>
+        <div class="detail-row"><div class="detail-key">GitHub</div><div class="detail-val"><a href="https://github.com/dolamasa1" target="_blank">@dolamasa1</a></div></div>
+        <div class="detail-row"><div class="detail-key">LinkedIn</div><div class="detail-val"><a href="https://linkedin.com/in/ahmed-el-moghraby" target="_blank">ahmed-el-moghraby</a></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-label">01 · Technical Skills</div>
+    <div class="skills-grid">
+      <div class="skill-card reveal"><div class="skill-card-title">Languages &amp; Frameworks</div><div class="tags"><span class="tag">Java 21</span><span class="tag">Spring Boot</span><span class="tag">Swing / JavaFX</span><span class="tag">Go</span><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">React</span></div></div>
+      <div class="skill-card reveal reveal-delay-1"><div class="skill-card-title">Databases &amp; Data Modeling</div><div class="tags"><span class="tag">PostgreSQL</span><span class="tag">SQL Server</span><span class="tag">MySQL</span><span class="tag">MongoDB</span><span class="tag">Vector DBs</span><span class="tag">ERD Design</span><span class="tag">PL/pgSQL</span></div></div>
+      <div class="skill-card reveal reveal-delay-2"><div class="skill-card-title">Real-Time &amp; APIs</div><div class="tags"><span class="tag">REST</span><span class="tag">WebSocket</span><span class="tag">STOMP</span><span class="tag">SSE</span><span class="tag">WebRTC</span><span class="tag">Message Queue</span></div></div>
+      <div class="skill-card reveal reveal-delay-3"><div class="skill-card-title">Infrastructure &amp; DevOps</div><div class="tags"><span class="tag">Linux</span><span class="tag">Microsoft Azure</span><span class="tag">VPS</span><span class="tag">Docker</span><span class="tag">GitHub Actions</span><span class="tag">CI/CD</span><span class="tag">Reverse Proxy</span></div></div>
+      <div class="skill-card reveal"><div class="skill-card-title">Systems &amp; Architecture</div><div class="tags"><span class="tag">Business Planning</span><span class="tag">Cross-Stack Benchmarking</span><span class="tag">State Machines</span><span class="tag">Low-Resource Optimization</span><span class="tag">2FA</span></div></div>
+      <div class="skill-card reveal reveal-delay-1"><div class="skill-card-title">Additional</div><div class="tags"><span class="tag">Python (ML)</span><span class="tag">JWT</span><span class="tag">Rate Limiting</span><span class="tag">IP Blacklisting</span><span class="tag">Bilingual UI</span><span class="tag">RTL Layouts</span><span class="tag">SEO / GEO</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-label">02 · Projects</div>
+
+    <div class="tier-header">Flagship Project</div>
+    <div class="project-flagship reveal">
+      <div class="flagship-label">FLAGSHIP</div>
+      <div class="project-header">
+        <div>
+          <div class="project-name">NeuralHealer — Mental Healthcare Platform</div>
+          <div class="project-meta">2025 – 2026 &nbsp;·&nbsp; Graduation Project &nbsp;·&nbsp; Open Source · v2.0.0 · 99+ commits · Java 59% + PL/pgSQL 19%</div>
+        </div>
+        <span class="project-badge badge-grad">Graduation</span>
+      </div>
+      <p class="project-desc">Open-source collaborative graduation project. I designed and built the entire backend — Spring Boot monolith with microservice decomposition in feature branches, Go reverse-proxy gateway, PostgreSQL Dual-Brain architecture, and all real-time infrastructure. ML and seizure-detection components were built by collaborators.</p>
+      <ul class="project-points">
+        <li><strong style="color:var(--text);font-weight:500;">My scope: backend only</strong> — Java/Spring Boot, Go gateway, PostgreSQL + PL/pgSQL, all real-time layers</li>
+        <li>Engagement state machine: PENDING → ACTIVE → ENDED/ARCHIVED — 2FA token activation, mutual termination, PL/pgSQL audit trails</li>
+        <li>Go reverse-proxy gateway: rate limiting, IP blacklisting, JWT validation at the edge</li>
+        <li>AI chat over STOMP/WebSocket — persistent sessions, smart titling, doctor-permission access model</li>
+        <li>Native WebRTC video calls integrated into the WebSocket user chat channel</li>
+        <li>Unified notifications: SSE stream + email queue (direct &amp; batch) + clinical assessments (IPIP-120, IPIP-50, PHQ-9)</li>
+        <li>Three-plane architecture: Control (ACID) · Data (audit-ready) · Real-Time (&lt;50ms delivery)</li>
+      </ul>
+      <div class="project-stack">
+        <span class="stack-tag">Java 21</span><span class="stack-tag">Spring Boot 3.2.5</span><span class="stack-tag">PostgreSQL 15</span><span class="stack-tag">PL/pgSQL</span><span class="stack-tag">Go Gateway</span><span class="stack-tag">WebSocket/STOMP</span><span class="stack-tag">SSE</span><span class="stack-tag">WebRTC</span><span class="stack-tag">Docker</span>
+      </div>
+      <div class="link-row">
+        <a href="https://github.com/dolamasa1/nuralhealer-backend" target="_blank" class="lnk lnk-gh">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub — Backend Source
+        </a>
+      </div>
+    </div>
+
+    <div class="tier-header">Major Projects</div>
+
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div>
+          <div class="project-name">MDS — Medical Dental System</div>
+          <div class="project-meta">2022 – Present &nbsp;·&nbsp; Solo Build · ~300k LOC · Live Clinic (10 Users)</div>
+        </div>
+        <span class="project-badge badge-live">Live</span>
+      </div>
+      <p class="project-desc">A full production clinic management system built solo — ~300,000 lines of code, 10 feature modules, serving 10 real users daily. Combines Java Swing's low-resource efficiency with enterprise UI/UX: 32-tooth dental chart, complete pharmaceutical dataset, full bilingual RTL support.</p>
+      <ul class="project-points">
+        <li>10 modules: patient records, case tracking, billing, appointments, prescriptions, profit analytics, and more</li>
+        <li>Bilingual UI (English + Arabic) with live RTL switching and dual-mode Azure + local SQL Server connector</li>
+      </ul>
+      <div class="project-stack"><span class="stack-tag">Java 21</span><span class="stack-tag">Java Swing</span><span class="stack-tag">SQL Server</span><span class="stack-tag">Azure SQL</span><span class="stack-tag">Spring Boot</span><span class="stack-tag">SSE</span><span class="stack-tag">Bilingual RTL</span></div>
+      <div class="link-row">
+        <a href="https://md-system.online" target="_blank" class="lnk lnk-web">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+          md-system.online
+        </a>
+        <span class="lnk lnk-private">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Source — Private
+        </span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div>
+          <div class="project-name">EEG Seizure Detection + Cross-Stack Concurrency Benchmark</div>
+          <div class="project-meta">2025 &nbsp;·&nbsp; Open Source · Collaborative · Published Research</div>
+        </div>
+        <span class="project-badge badge-oss">Research</span>
+      </div>
+      <p class="project-desc">Contributed the Go REST backend and full CI/CD observability pipeline to an open-source ML seizure detection project. Separately authored a solo cross-stack benchmark comparing concurrency models across Java, Node.js, and Go — published with quantified metrics.</p>
+      <ul class="project-points">
+        <li>Built the Go REST backend serving the ML prediction pipeline; GitHub Actions + Docker CI/CD from scratch</li>
+        <li>Sole author of the Java vs Node.js vs Go concurrency benchmark — real load, real numbers</li>
+      </ul>
+      <div class="project-stack"><span class="stack-tag">Go</span><span class="stack-tag">Docker</span><span class="stack-tag">GitHub Actions</span><span class="stack-tag">Java</span><span class="stack-tag">Node.js</span><span class="stack-tag">REST</span><span class="stack-tag">CI/CD</span></div>
+      <div class="link-row">
+        <a href="https://github.com/dolamasa1/Node.js-vs-Spring-Boot-Messenger-Benchmark" target="_blank" class="lnk lnk-gh">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          Benchmark Repo
+        </a>
+        <a href="https://github.com/MariamRaafatMohamed/seizure-detection-project" target="_blank" class="lnk lnk-gh">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          EEG Project (Collab)
+        </a>
+      </div>
+    </div>
+
+    <div class="tier-header">Open Source &amp; Side Projects</div>
+    <div class="oss-row">
+      <div class="oss-card reveal">
+        <div class="oss-card-header">
+          <div class="oss-name">dolatip</div>
+          <span class="project-badge badge-comp">Component</span>
+        </div>
+        <p class="oss-desc">Animated tooltip for Java Swing — fade-in/out, trend indicators (▲ ▼ ●), expandable history, rounded corners with shadow. Fills a real gap: the Swing ecosystem has almost no modern UI components. Single-file, MIT licensed, drop-in ready.</p>
+        <div class="tags"><span class="tag">Java Swing</span><span class="tag">Animation</span><span class="tag">Reusable</span><span class="tag">MIT</span></div>
+        <div class="link-row">
+          <a href="https://github.com/dolamasa1/dolatip" target="_blank" class="lnk lnk-gh">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+      <div class="oss-card reveal reveal-delay-1">
+        <div class="oss-card-header">
+          <div class="oss-name">Wordle — Bilingual Edition</div>
+          <span class="project-badge badge-game">Game / Tool</span>
+        </div>
+        <p class="oss-desc">A Wordle clone built as a vocabulary tool — primarily for medical professionals expanding English. 4.2MB bilingual EN/AR dictionary, CEFR levels A1–C2, frequency scoring, glassmorphism UI. Fully local, no backend, PWA-ready.</p>
+        <div class="tags"><span class="tag">HTML/JS</span><span class="tag">Python</span><span class="tag">Bilingual</span><span class="tag">CEFR</span><span class="tag">PWA</span></div>
+        <div class="link-row">
+          <a href="https://github.com/dolamasa1/wordle" target="_blank" class="lnk lnk-gh">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </div><!-- /oss-row -->
+
+    <div class="private-note reveal">
+      <div class="private-note-icon">🔒</div>
+      <div class="private-note-text">
+        <strong>Some work isn't public.</strong> The MDS codebase (~300k LOC) is proprietary and remains private — it runs a live clinic. Other client work and internal tools from freelance engagements are similarly not mine to share. What's shown here represents what I'm able to make visible.
+      </div>
+    </div>
+  </div><!-- /wrap -->
+</section>
+
+<section id="sites">
+  <div class="wrap">
+    <div class="section-label">03 · Live Websites</div>
+    <div class="sites-grid">
+      <a href="https://md-system.online" target="_blank" class="site-card reveal">
+        <div class="site-url">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+          md-system.online
+        </div>
+        <div class="site-name">Medical Dental System</div>
+        <p class="site-desc">Full-stack product site for the MDS desktop application — SEO/GEO optimized, strong brand identity and product storytelling.</p>
+        <div class="tags" style="margin-top:0.85rem;"><span class="tag">Full-Stack</span><span class="tag">SEO</span><span class="tag">GEO</span><span class="tag">Dental Tech</span></div>
+      </a>
+      <a href="https://maghrabydental.online" target="_blank" class="site-card reveal reveal-delay-1">
+        <div class="site-url">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+          maghrabydental.online
+        </div>
+        <div class="site-name">Maghraby Dental</div>
+        <p class="site-desc">Landing page with superior SEO/GEO strategy, original storytelling, custom color palette, and strong brand identity — built entirely from scratch.</p>
+        <div class="tags" style="margin-top:0.85rem;"><span class="tag">Landing Page</span><span class="tag">Brand Identity</span><span class="tag">SEO</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-label">04 · Experience</div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-period">2026 — Present</div>
+        <div class="tl-title">Junior Backend Developer</div>
+        <div class="tl-org">Nahj Company — Startup, Ismailia · Freelance</div>
+        <div class="tl-desc">Delivered backend features end-to-end including database schema design and full API delivery for a growing startup.</div>
+      </div>
+      <div class="tl-item reveal">
+        <div class="tl-period">2022 — Present</div>
+        <div class="tl-title">Solo Developer — MDS Medical Dental System</div>
+        <div class="tl-org">Independent · Cairo, Egypt</div>
+        <div class="tl-desc">Designed, built, and maintained a ~300k LOC production clinic management system used daily by 10 users in a live dental practice.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-label">04 · Education &amp; Training</div>
+    <div class="edu-grid">
+      <div class="edu-card reveal">
+        <div class="edu-degree">BSc Computer Science</div>
+        <div class="edu-school">Modern Academy, Maadi — Cairo, Egypt</div>
+        <div class="edu-period">Expected June 2026</div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-top:0.55rem;">Graduation project: NeuralHealer — full mental healthcare platform.</p>
+      </div>
+      <div class="edu-card reveal reveal-delay-1">
+        <div class="edu-degree">Certifications</div>
+        <div class="edu-school">Professional training</div>
+        <div class="cert-list">
+          <div class="cert-item"><span class="cert-name">SQL Server &amp; DB Design</span><span class="cert-org">IT-Gates</span></div>
+          <div class="cert-item"><span class="cert-name">Machine Learning</span><span class="cert-org">IT-Gates</span></div>
+          <div class="cert-item"><span class="cert-name">Node.js Development</span><span class="cert-org">Orbsocbe</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-label">05 · Contact</div>
+    <div class="contact-inner">
+      <div class="reveal">
+        <h2>Let's Build Something.</h2>
+        <p style="margin-top:0.7rem;">Open to backend engineering roles, system architecture consulting, and interesting collaborative projects. Whether you have an idea, an opportunity, or just want to talk systems — reach out.</p>
+        <a href="mailto:ahmed.adel.elmoghraby@gmail.com" class="btn btn-primary">Send an Email ↗</a>
+      </div>
+      <div class="contact-links reveal reveal-delay-1">
+        <a href="mailto:ahmed.adel.elmoghraby@gmail.com" class="contact-link"><span class="icon">✉</span>ahmed.adel.elmoghraby@gmail.com</a>
+        <a href="tel:+201204183236" class="contact-link"><span class="icon">✆</span>+20 120 418 3236</a>
+        <a href="https://github.com/dolamasa1" target="_blank" class="contact-link"><span class="icon">⌥</span>github.com/dolamasa1</a>
+        <a href="https://linkedin.com/in/ahmed-el-moghraby" target="_blank" class="contact-link"><span class="icon">in</span>ahmed-el-moghraby</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left"><span class="footer-handle">dolamasa</span> · Ahmed Adel Moghraby · Cairo, Egypt · 2026</div>
+  <div class="footer-right">Built with precision ◈</div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+    });
+  }, 60);
+</script>
+</body>
+</html>
